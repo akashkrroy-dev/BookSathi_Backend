@@ -13,6 +13,14 @@ const errorHandler = (err: unknown, _req: Request, res: Response, _next: NextFun
     if (
         typeof err === "object" &&
         err !== null &&
+        "type" in err &&
+        (err as { type: unknown }).type === "entity.too.large") {
+        return res.status(413).json({ success: false, message: "Payload too large", error: null })
+    }
+
+    if (
+        typeof err === "object" &&
+        err !== null &&
         "code" in err &&
         (err as { code: unknown }).code === 11000) {
         return res.status(409).json({ success: false, message: "Already exists", error: null })

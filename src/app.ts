@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import helmet from "helmet"
 import cookieParser from "cookie-parser"
 
 import env from "./config/env.config.js"
@@ -9,6 +10,8 @@ import { ApiErr } from "./utils/classes.js"
 
 const app = express()
 app.set("trust proxy", 1)
+app.use(helmet())
+app.disable("x-powered-by")
 
 app.use(
   cors({
@@ -17,11 +20,12 @@ app.use(
   })
 )
 
-app.use(express.json())
+app.use(express.json({ limit: "10kb" }))
+app.use(express.urlencoded({ extended: true, limit: "10kb" }))
 app.use(cookieParser())
 
 app.get("/health", (_, res) => {
-   res.type("text").send("ok")
+  res.type("text").send("ok")
 })
 
 app.use("/auth", AuthRoute)

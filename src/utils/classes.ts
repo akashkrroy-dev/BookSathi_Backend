@@ -1,10 +1,10 @@
 export class ApiRes<T = unknown> {
   statusCode: number;
-  data: T;
+  data: T | null;
   message: string;
   success: boolean;
 
-  constructor(statusCode = 200, message = "Success", data: T) {
+  constructor(statusCode = 200, message = "Success", data: T | null = null) {
     this.statusCode = statusCode;
     this.success = statusCode < 400;
     this.message = message;
